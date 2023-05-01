@@ -1,8 +1,8 @@
 return {
     'MunifTanjim/prettier.nvim',
-    config = function ()
+    config = function()
         require('prettier').setup {
-            bin = 'prettierd',
+            bin = 'prettier',
             filetypes = {
                 "css",
                 "javascript",
@@ -19,3 +19,4 @@ return {
         }
     end
 }
+
