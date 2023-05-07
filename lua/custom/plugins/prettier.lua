@@ -12,11 +12,7 @@ return {
                 "json",
                 "scss",
                 "less",
-                "py",
-                "python",
-                "dart"
             }
         }
     end
 }
-

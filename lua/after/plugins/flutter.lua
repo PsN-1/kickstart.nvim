@@ -8,8 +8,6 @@ require("flutter-tools").setup {
 		enabled = true,
 	},
 	lsp = {
-		on_attach = on_attach,
-		capabilities = capabilities,
 		color = {
 			enabled = true
 		}

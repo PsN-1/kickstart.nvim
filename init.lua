@@ -25,7 +25,8 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
   ---@diagnostic disable-next-line: assign-type-mismatch
-  { -- LSP Configuration & Plugins
+  {
+    -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
@@ -39,12 +40,14 @@ require('lazy').setup({
       'folke/neodev.nvim',
     },
   },
-  { -- Autocompletion
+  {
+    -- Autocompletion
     'hrsh7th/nvim-cmp',
     dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
   },
 
-  { -- Highlight, edit, and navigate code
+  {
+    -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
@@ -59,11 +62,11 @@ require('lazy').setup({
   'tpope/vim-rhubarb',
   'lewis6991/gitsigns.nvim',
 
-  'navarasu/onedark.nvim', -- Theme inspired by Atom
-  'nvim-lualine/lualine.nvim', -- Fancier statusline
+  'navarasu/onedark.nvim',               -- Theme inspired by Atom
+  'nvim-lualine/lualine.nvim',           -- Fancier statusline
   'lukas-reineke/indent-blankline.nvim', -- Add indentation guides even on blank lines
-  'numToStr/Comment.nvim', -- "gc" to comment visual regions/lines
-  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  'numToStr/Comment.nvim',               -- "gc" to comment visual regions/lines
+  'tpope/vim-sleuth',                    -- Detect tabstop and shiftwidth automatically
 
   -- Fuzzy Finder (files, lsp, etc)
   { 'nvim-telescope/telescope.nvim', branch = '0.1.x', dependencies = { 'nvim-lua/plenary.nvim' } },
@@ -213,10 +216,12 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'javascript', 'swift', 'dart', 'rust', 'help', 'vim', 'http', 'json' },
+  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'javascript', 'swift', 'dart', 'rust', 'vim', 'json',
+    'tsx', 'json', 'yaml', 'css',
+    'html' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-  auto_install = false,
+  auto_install = true,
 
   autotag = {
     enable = true,
@@ -279,6 +284,9 @@ require('nvim-treesitter.configs').setup {
   },
 }
 
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.tsx.filetype_to_parsername = { "javascript", "typescript.tsx" }
+
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
@@ -294,35 +302,6 @@ on_attach = function(_, bufnr)
   --
   -- In this case, we create a function that lets us more easily define mappings specific
   -- for LSP related items. It sets the mode, buffer and description for us each time.
-  local nmap = function(keys, func, desc)
-    if desc then
-      desc = 'LSP: ' .. desc
-    end
-
-    vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
-  end
-
-  nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-  nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-
-  nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-  nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-  nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
-  nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
-  nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-  nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
-
-  -- See `:help K` for why this keymap
-  nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
-
-  -- Lesser used LSP functionality
-  nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-  nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-  nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-  nmap('<leader>wl', function()
-    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, '[W]orkspace [L]ist Folders')
 
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
@@ -339,7 +318,8 @@ local servers = {
   -- clangd = {},
   gopls = {},
   pyright = {},
-  tsserver = {},
+  tailwindcss = {},
+  -- tsserver = {},
   -- rust_analyzer = {},
   lua_ls = {
     Lua = {
@@ -353,7 +333,7 @@ local servers = {
 require('neodev').setup()
 --
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
-capabilities = vim.lsp.protocol.make_client_capabilities()
+local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 -- Ensure the servers above are installed
@@ -373,12 +353,61 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
+local nvim_lsp = require "lspconfig"
+nvim_lsp.tailwindcss.setup {}
+
 -- Turn on lsp status information
 require('fidget').setup()
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
+local lspkind = require 'lspkind'
+
+lspkind.init({
+  -- enables text annotations
+  --
+  -- default: true
+  mode = 'symbol',
+
+  -- default symbol map
+  -- can be either 'default' (requires nerd-fonts font) or
+  -- 'codicons' for codicon preset (requires vscode-codicons font)
+  --
+  -- default: 'default'
+  preset = 'codicons',
+
+  -- override preset symbols
+  --
+  -- default: {}
+  symbol_map = {
+    Text = "",
+    Method = "",
+    Function = "",
+    Constructor = "",
+    Field = "ﰠ",
+    Variable = "",
+    Class = "ﴯ",
+    Interface = "",
+    Module = "",
+    Property = "ﰠ",
+    Unit = "塞",
+    Value = "",
+    Enum = "",
+    Keyword = "",
+    Snippet = "",
+    Color = "",
+    File = "",
+    Reference = "",
+    Folder = "",
+    EnumMember = "",
+    Constant = "",
+    Struct = "פּ",
+    Event = "",
+    Operator = "",
+    TypeParameter = ""
+  },
+})
 
 luasnip.config.setup {}
 
@@ -389,37 +418,27 @@ cmp.setup {
     end,
   },
   mapping = cmp.mapping.preset.insert {
-    ['<C-d>'] = cmp.mapping.scroll_docs( -4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-    -- ['<Tab>'] = cmp.mapping(function(fallback)
-    --   if cmp.visible() then
-    --     cmp.select_next_item()
-    --   elseif luasnip.expand_or_jumpable() then
-    --     luasnip.expand_or_jump()
-    --   else
-    --     fallback()
-    --   end
-    -- end, { 'i', 's' }),
-    -- ['<S-Tab>'] = cmp.mapping(function(fallback)
-    --   if cmp.visible() then
-    --     cmp.select_prev_item()
-    --   elseif luasnip.jumpable(-1) then
-    --     luasnip.jump(-1)
-    --   else
-    --     fallback()
-    --   end
-    -- end, { 'i', 's' }),
   },
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
   },
+  formatting = {
+    format = lspkind.cmp_format({ with_text = false, maxwidth = 50 })
+  }
 }
+
+vim.cmd [[
+  set completeopt=menuone,noinsert,noselect
+  highlight! default link CmpItemKind CmpItemMenuDefault
+]]
 
 
 require 'after.plugins.flutter'
