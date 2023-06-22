@@ -1,16 +1,16 @@
 local on_attach = function(client, bufnr)
 	-- format on save
-	if client.server_capabilities.documentFormattingProvider then
-		vim.api.nvim_create_autocmd("BufWritePre", {
-			group = vim.api.nvim_create_augroup("Format", { clear = true }),
-			buffer = bufnr,
-			callback = function() vim.lsp.buf.formatting_seq_sync() end
-		})
-	end
+	-- if client.server_capabilities.documentFormattingProvider then
+	-- 	vim.api.nvim_create_autocmd("BufWritePre", {
+	-- 		group = vim.api.nvim_create_augroup("Format", { clear = true }),
+	-- 		buffer = bufnr,
+	-- 		callback = function() vim.lsp.buf.formatting_seq_sync() end
+	-- 	})
+	-- end
 end
 
 require('lspconfig').tsserver.setup {
-	-- on_attach = on_attach,
+	on_attach = on_attach,
 	filttetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript", "javascript.js", "javascriptreact",
 		"javascript.jsx" },
 	cmd = { "typescript-language-server", "--stdio" }
@@ -34,7 +34,7 @@ null_ls.setup {
 		null_ls.builtins.diagnostics.eslint_d.with({
 			diagnostics_format = '[eslint] #{m}\n(#{c})'
 		}),
-		null_ls.builtins.diagnostics.fish
+		-- null_ls.builtins.diagnostics.fish
 	},
 	on_attach = function(client, bufnr)
 		if client.supports_method("textDocument/formatting") then
