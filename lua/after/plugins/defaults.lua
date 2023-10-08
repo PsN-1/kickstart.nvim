@@ -90,3 +90,5 @@ vim.keymap.set('v', '<leader>d', "\"_d")
 
 vim.keymap.set('n', '<leader>fc', require('telescope').extensions.flutter.commands, { desc = '[F]lutter [C]ommands' })
 vim.keymap.set('n', '<leader>fo', '<Cmd>FlutterOutlineToggle<CR>', {})
+
+vim.cmd.colorscheme "catppuccin-frappe"

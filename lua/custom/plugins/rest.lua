@@ -1,7 +1,6 @@
 return {
     "rest-nvim/rest.nvim",
     dependencies = { 'nvim-lua/plenary.nvim' },
-    lazy = false,
     config = function()
         local rest_nvim = require('rest-nvim')
         rest_nvim.setup({

@@ -61,8 +61,10 @@ require('lazy').setup({
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
   'lewis6991/gitsigns.nvim',
+  'github/copilot.vim',
 
   'navarasu/onedark.nvim',               -- Theme inspired by Atom
+  'catppuccin/nvim',
   'nvim-lualine/lualine.nvim',           -- Fancier statusline
   'lukas-reineke/indent-blankline.nvim', -- Add indentation guides even on blank lines
   'numToStr/Comment.nvim',               -- "gc" to comment visual regions/lines
