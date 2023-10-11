@@ -446,6 +446,13 @@ vim.cmd [[
 require 'after.plugins.flutter'
 require 'after.plugins.defaults'
 require 'after.plugins.nullls'
+
+
+require 'lspconfig'.sourcekit.setup {
+  cmd = { '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp' },
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
 --
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
