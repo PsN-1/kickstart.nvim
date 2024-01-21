@@ -61,7 +61,7 @@ require('lazy').setup({
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
   'lewis6991/gitsigns.nvim',
-  'github/copilot.vim',
+  -- 'github/copilot.vim',
 
   'navarasu/onedark.nvim',               -- Theme inspired by Atom
   'catppuccin/nvim',
