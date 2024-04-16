@@ -47,7 +47,7 @@ vim.keymap.set('n', '<leader>gs', require('telescope.builtin').git_status, { des
 
 vim.keymap.set('n', '<leader>gd', '<Cmd>Gvdiffsplit<CR>', { desc = '[G]it [D]iff (vertical split)' })
 
-vim.keymap.set('n', '<leader>p', '<Cmd>Format<CR>')
+vim.keymap.set('n', '<leader>p', '<Cmd>Prettier<CR>')
 vim.keymap.set('n', '<leader>v', '<Cmd>NERDTreeToggle<CR>')
 
 vim.keymap.set('n', '<Tab>', '<Cmd>BufferLineCycleNext<CR>', {})
