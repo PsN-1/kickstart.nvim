@@ -28,8 +28,6 @@ nmap('<leader>wl', function()
 	print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 end, '[W]orkspace [L]ist Folders')
 
-
-
 vim.opt.relativenumber = true
 vim.opt.tabstop = 4
 vim.opt.scrolloff = 8
@@ -49,6 +47,7 @@ vim.keymap.set('n', '<leader>gd', '<Cmd>Gvdiffsplit<CR>', { desc = '[G]it [D]iff
 
 vim.keymap.set('n', '<leader>p', '<Cmd>Prettier<CR>')
 vim.keymap.set('n', '<leader>v', '<Cmd>NERDTreeToggle<CR>')
+vim.keymap.set('n', '<leader>w', '<Cmd>bufdo bd<CR>')
 
 vim.keymap.set('n', '<Tab>', '<Cmd>BufferLineCycleNext<CR>', {})
 vim.keymap.set('n', '<S-Tab>', '<Cmd>BufferLineCyclePrev<CR>', {})

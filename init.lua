@@ -223,7 +223,7 @@ require('nvim-treesitter.configs').setup {
   },
 
   highlight = { enable = true },
-  indent = { enable = false, disable = { 'python', 'dart', 'html' } },
+  indent = { enable = false, disable = { 'python', 'dart', 'html', 'js' } },
   incremental_selection = {
     enable = true,
     keymaps = {
