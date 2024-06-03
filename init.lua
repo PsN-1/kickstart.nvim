@@ -729,11 +729,11 @@ require('lazy').setup({
           -- Accept ([y]es) the completion.
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
-          ['<C-y>'] = cmp.mapping.confirm { select = true },
+          -- ['<C-y>'] = cmp.mapping.confirm { select = true },
 
           -- If you prefer more traditional completion keymaps,
           -- you can uncomment the following lines
-          --['<CR>'] = cmp.mapping.confirm { select = true },
+          ['<CR>'] = cmp.mapping.confirm { select = true },
           --['<Tab>'] = cmp.mapping.select_next_item(),
           --['<S-Tab>'] = cmp.mapping.select_prev_item(),
 
@@ -778,13 +778,13 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
+    'catppuccin/nvim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     init = function()
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'catppuccin-frappe'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
@@ -879,6 +879,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  { import = 'custom.plugins' },
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
@@ -908,36 +909,34 @@ require('lazy').setup({
   },
 })
 
--- vim.cmd [[
---   set completeopt=menuone,noinsert,noselect
---   highlight! default link CmpItemKind CmpItemMenuDefault
--- ]]
-
+vim.cmd [[
+  set completeopt=menuone,noinsert,noselect
+  highlight! default link CmpItemKind CmpItemMenuDefault
+]]
 
 require 'after.plugins.flutter'
 require 'after.plugins.defaults'
 -- require 'after.plugins.nullls'
 
-
-require 'lspconfig'.sourcekit.setup {
+require('lspconfig').sourcekit.setup {
   cmd = { '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp' },
   on_attach = on_attach,
   capabilities = capabilities,
 }
 
-local swift_lsp = vim.api.nvim_create_augroup("swift_lsp", { clear = true })
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "swift" },
+local swift_lsp = vim.api.nvim_create_augroup('swift_lsp', { clear = true })
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'swift' },
   callback = function()
     local root_dir = vim.fs.dirname(vim.fs.find({
-      "Package.swift",
-      ".git",
+      'Package.swift',
+      '.git',
     }, { upward = true })[1])
-    local client = vim.lsp.start({
-      name = "sourcekit-lsp",
-      cmd = { "sourcekit-lsp" },
+    local client = vim.lsp.start {
+      name = 'sourcekit-lsp',
+      cmd = { 'sourcekit-lsp' },
       root_dir = root_dir,
-    })
+    }
     vim.lsp.buf_attach_client(0, client)
   end,
   group = swift_lsp,
