@@ -61,7 +61,7 @@ require('lazy').setup({
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
   'lewis6991/gitsigns.nvim',
-  -- 'github/copilot.vim',
+  'github/copilot.vim',
 
   'navarasu/onedark.nvim',     -- Theme inspired by Atom
   'catppuccin/nvim',
@@ -218,9 +218,7 @@ require('nvim-treesitter.configs').setup {
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = true,
 
-  autotag = {
-    enable = true,
-  },
+  enable = true,
 
   highlight = { enable = true },
   indent = { enable = false, disable = { 'python', 'dart', 'html', 'js' } },
