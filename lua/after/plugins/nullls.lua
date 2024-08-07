@@ -10,10 +10,19 @@
 -- end
 --
 require('lspconfig').tsserver.setup {
-	on_attach = on_attach,
-	filttetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript", "javascript.js", "javascriptreact",
-		"javascript.jsx" },
-	cmd = { "typescript-language-server", "--stdio" }
+  on_attach = on_attach,
+  filttetypes = { 'typescript', 'typescriptreact', 'typescript.tsx', 'javascript', 'javascript.js', 'javascriptreact', 'javascript.jsx' },
+  cmd = { 'typescript-language-server', '--stdio' },
+}
+
+local null_ls = require 'null-ls'
+
+null_ls.setup {
+  sources = {
+    null_ls.builtins.formatting.stylua,
+    null_ls.builtins.completion.spell,
+    require 'none-ls.diagnostics.eslint', -- requires none-ls-extras.nvim
+  },
 }
 
 -- local null_ls = require("null-ls")

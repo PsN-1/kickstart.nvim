@@ -1,9 +1,9 @@
 local nmap = function(keys, func, desc)
-	if desc then
-		desc = 'LSP: ' .. desc
-	end
+  if desc then
+    desc = 'LSP: ' .. desc
+  end
 
-	vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+  vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
 end
 
 nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
@@ -25,7 +25,7 @@ nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
 nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
 nmap('<leader>wl', function()
-	print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+  print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 end, '[W]orkspace [L]ist Folders')
 
 vim.opt.relativenumber = true
@@ -39,7 +39,6 @@ vim.g.netrw_browse_split = 4
 vim.g.netrw_altv = 1
 
 vim.o.incsearch = true
-
 
 vim.keymap.set('n', '<leader>gs', require('telescope.builtin').git_status, { desc = '[G]it [S]tatus' })
 
@@ -59,35 +58,31 @@ vim.keymap.set('n', '<leader>4', '<Cmd>BufferLineGoToBuffer 4<CR>', {})
 vim.keymap.set('n', '<leader>5', '<Cmd>BufferLineGoToBuffer 5<CR>', {})
 vim.keymap.set('n', '<leader>6', '<Cmd>BufferLineGoToBuffer 6<CR>', {})
 
-
 vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
 
-
-
 -- Allow to move select text up and down
-vim.keymap.set('v', "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set('v', "K", ":m '<-2<CR>gv=gv")
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 
 -- Maintain the cursor at the center of screen while half-page scrolling
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 vim.keymap.set('n', '<C-u>', '<C-u>zz')
 
-
 -- Maintain the cursor at the center while searching
 vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
 
-vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
+vim.keymap.set('n', '<leader>s', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>')
 
 -- Copy to the system clipboard
-vim.keymap.set('n', '<leader>y', "\"+y")
-vim.keymap.set('v', '<leader>y', "\"+y")
-vim.keymap.set('n', '<leader>Y', "\"+Y")
+vim.keymap.set('n', '<leader>y', '"+y')
+vim.keymap.set('v', '<leader>y', '"+y')
+vim.keymap.set('n', '<leader>Y', '"+Y')
 
-vim.keymap.set('n', '<leader>d', "\"_d")
-vim.keymap.set('v', '<leader>d', "\"_d")
+vim.keymap.set('n', '<leader>d', '"_d')
+vim.keymap.set('v', '<leader>d', '"_d')
 
 vim.keymap.set('n', '<leader>fc', require('telescope').extensions.flutter.commands, { desc = '[F]lutter [C]ommands' })
 vim.keymap.set('n', '<leader>fo', '<Cmd>FlutterOutlineToggle<CR>', {})
 
-vim.cmd.colorscheme "catppuccin-frappe"
+vim.cmd.colorscheme 'catppuccin-frappe'
