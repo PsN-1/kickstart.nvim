@@ -29,8 +29,14 @@ nmap('<leader>wl', function()
 end, '[W]orkspace [L]ist Folders')
 
 vim.opt.relativenumber = true
-vim.opt.tabstop = 4
+-- vim.opt.tabstop = 4
 vim.opt.scrolloff = 8
+
+vim.opt.list = true
+-- vim.opt.expandtab = true
+vim.opt.shiftwidth = 2
+vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
 
 -- I think this is the treeside stuff
 vim.g.netrw_liststyle = 3
