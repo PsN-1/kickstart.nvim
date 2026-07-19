@@ -200,7 +200,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
-    vim.highlight.on_yank()
+    vim.hl.on_yank()
   end,
 })
 
@@ -579,6 +579,11 @@ require('lazy').setup({
         -- tsserver = {},
         --
         biome = {},
+        sourcekit = {
+          cmd = vim.fn.executable '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp' == 1
+              and { '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp' }
+            or { 'sourcekit-lsp' },
+        },
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -624,43 +629,6 @@ require('lazy').setup({
         },
       }
     end,
-  },
-
-  { -- Autoformat
-    'stevearc/conform.nvim',
-    lazy = false,
-    keys = {
-      {
-        '<leader>f',
-        function()
-          require('conform').format { async = true, lsp_fallback = true }
-        end,
-        mode = '',
-        desc = '[F]ormat buffer',
-      },
-    },
-    opts = {
-      notify_on_error = false,
-      format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
-        return {
-          timeout_ms = 500,
-          lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
-        }
-      end,
-      formatters_by_ft = {
-        lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use a sub-list to tell conform to run *until* a formatter
-        -- is found.
-        -- javascript = { { "prettierd", "prettier" } },
-      },
-    },
   },
 
   { -- Autocompletion
@@ -773,12 +741,6 @@ require('lazy').setup({
       }
     end,
   },
-  {
-    'Mofiqul/vscode.nvim',
-    lazy = false,
-    priority = 1000,
-  },
-
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is.
@@ -920,33 +882,8 @@ vim.cmd [[
   highlight! default link CmpItemKind CmpItemMenuDefault
 ]]
 
-require 'after.plugins.flutter'
 require 'after.plugins.defaults'
 -- require 'after.plugins.nullls'
-
-require('lspconfig').sourcekit.setup {
-  cmd = { '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp' },
-  on_attach = on_attach,
-  capabilities = capabilities,
-}
-
-local swift_lsp = vim.api.nvim_create_augroup('swift_lsp', { clear = true })
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'swift' },
-  callback = function()
-    local root_dir = vim.fs.dirname(vim.fs.find({
-      'Package.swift',
-      '.git',
-    }, { upward = true })[1])
-    local client = vim.lsp.start {
-      name = 'sourcekit-lsp',
-      cmd = { 'sourcekit-lsp' },
-      root_dir = root_dir,
-    }
-    vim.lsp.buf_attach_client(0, client)
-  end,
-  group = swift_lsp,
-})
 --
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
