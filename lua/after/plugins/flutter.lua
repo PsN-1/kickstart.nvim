@@ -1,0 +1,1 @@
+-- Flutter tools setup lives in lua/custom/plugins/fluttertools.lua (loaded by lazy.nvim).
