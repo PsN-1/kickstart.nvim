@@ -10,11 +10,8 @@ nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
 nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
 nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
 nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
 nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
-nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
 -- See `:help K` for why this keymap
 -- nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
@@ -27,6 +24,24 @@ nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Fo
 nmap('<leader>wl', function()
   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 end, '[W]orkspace [L]ist Folders')
+
+local setup_telescope_keymaps = function()
+  local builtin = require('telescope.builtin')
+
+  nmap('gr', builtin.lsp_references, '[G]oto [R]eferences')
+  nmap('<leader>ds', builtin.lsp_document_symbols, '[D]ocument [S]ymbols')
+  nmap('<leader>ws', builtin.lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+  vim.keymap.set('n', '<leader>gs', builtin.git_status, { desc = '[G]it [S]tatus' })
+end
+
+if vim.v.vim_did_enter == 1 then
+  setup_telescope_keymaps()
+else
+  vim.api.nvim_create_autocmd('VimEnter', {
+    once = true,
+    callback = setup_telescope_keymaps,
+  })
+end
 
 vim.opt.relativenumber = true
 -- vim.opt.tabstop = 4
@@ -46,25 +61,23 @@ vim.g.netrw_altv = 1
 
 vim.o.incsearch = true
 
-vim.keymap.set('n', '<leader>gs', require('telescope.builtin').git_status, { desc = '[G]it [S]tatus' })
-
 vim.keymap.set('n', '<leader>gd', '<Cmd>Gvdiffsplit<CR>', { desc = '[G]it [D]iff (vertical split)' })
 
-vim.keymap.set('n', '<leader>p', '<Cmd>Prettier<CR>')
-vim.keymap.set('n', '<leader>v', '<Cmd>NERDTreeToggle<CR>')
-vim.keymap.set('n', '<leader>w', '<Cmd>bufdo bd<CR>')
+vim.keymap.set('n', '<leader>p', '<Cmd>Prettier<CR>', { desc = '[P]rettier format' })
+vim.keymap.set('n', '<leader>v', '<Cmd>NERDTreeToggle<CR>', { desc = '[V]iew file tree' })
+vim.keymap.set('n', '<leader>w', '<Cmd>bufdo bd<CR>', { desc = '[W]ipe all buffers' })
 
-vim.keymap.set('n', '<Tab>', '<Cmd>BufferLineCycleNext<CR>', {})
-vim.keymap.set('n', '<S-Tab>', '<Cmd>BufferLineCyclePrev<CR>', {})
+vim.keymap.set('n', '<Tab>', '<Cmd>BufferLineCycleNext<CR>', { desc = 'Next buffer' })
+vim.keymap.set('n', '<S-Tab>', '<Cmd>BufferLineCyclePrev<CR>', { desc = 'Previous buffer' })
 
-vim.keymap.set('n', '<leader>1', '<Cmd>BufferLineGoToBuffer 1<CR>', {})
-vim.keymap.set('n', '<leader>2', '<Cmd>BufferLineGoToBuffer 2<CR>', {})
-vim.keymap.set('n', '<leader>3', '<Cmd>BufferLineGoToBuffer 3<CR>', {})
-vim.keymap.set('n', '<leader>4', '<Cmd>BufferLineGoToBuffer 4<CR>', {})
-vim.keymap.set('n', '<leader>5', '<Cmd>BufferLineGoToBuffer 5<CR>', {})
-vim.keymap.set('n', '<leader>6', '<Cmd>BufferLineGoToBuffer 6<CR>', {})
+vim.keymap.set('n', '<leader>1', '<Cmd>BufferLineGoToBuffer 1<CR>', { desc = 'Buffer 1' })
+vim.keymap.set('n', '<leader>2', '<Cmd>BufferLineGoToBuffer 2<CR>', { desc = 'Buffer 2' })
+vim.keymap.set('n', '<leader>3', '<Cmd>BufferLineGoToBuffer 3<CR>', { desc = 'Buffer 3' })
+vim.keymap.set('n', '<leader>4', '<Cmd>BufferLineGoToBuffer 4<CR>', { desc = 'Buffer 4' })
+vim.keymap.set('n', '<leader>5', '<Cmd>BufferLineGoToBuffer 5<CR>', { desc = 'Buffer 5' })
+vim.keymap.set('n', '<leader>6', '<Cmd>BufferLineGoToBuffer 6<CR>', { desc = 'Buffer 6' })
 
-vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
+vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'Hover Documentation' })
 
 -- Allow to move select text up and down
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
@@ -78,17 +91,14 @@ vim.keymap.set('n', '<C-u>', '<C-u>zz')
 vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
 
-vim.keymap.set('n', '<leader>s', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>')
+vim.keymap.set('n', '<leader>rw', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>', { desc = '[R]eplace word' })
 
 -- Copy to the system clipboard
-vim.keymap.set('n', '<leader>y', '"+y')
-vim.keymap.set('v', '<leader>y', '"+y')
-vim.keymap.set('n', '<leader>Y', '"+Y')
+vim.keymap.set('n', '<leader>y', '"+y', { desc = '[Y]ank to system clipboard' })
+vim.keymap.set('v', '<leader>y', '"+y', { desc = '[Y]ank to system clipboard' })
+vim.keymap.set('n', '<leader>Y', '"+Y', { desc = '[Y]ank line to system clipboard' })
 
-vim.keymap.set('n', '<leader>d', '"_d')
-vim.keymap.set('v', '<leader>d', '"_d')
-
-vim.keymap.set('n', '<leader>fc', require('telescope').extensions.flutter.commands, { desc = '[F]lutter [C]ommands' })
-vim.keymap.set('n', '<leader>fo', '<Cmd>FlutterOutlineToggle<CR>', {})
+vim.keymap.set('n', '<leader>d', '"_d', { desc = '[D]elete without yank' })
+vim.keymap.set('v', '<leader>d', '"_d', { desc = '[D]elete without yank' })
 
 vim.cmd.colorscheme 'catppuccin-frappe'
